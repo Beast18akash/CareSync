@@ -1,0 +1,128 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+
+export default function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [role, setRole] = useState('receptionist')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const { login } = useAuth()
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
+    if (!email || !password) {
+      setError('Please enter email and password')
+      return
+    }
+    setLoading(true)
+    try {
+      const name = role === 'doctor' ? 'Dr. User' : 'Receptionist'
+      login(email, role, name)
+      navigate('/', { replace: true })
+    } catch (err) {
+      setError('Login failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="card">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-primary">ClinicPro</h1>
+            <p className="text-text-muted mt-1">Doctor Appointment System</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-text-dark mb-2">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-field"
+                placeholder="you@clinic.com"
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-text-dark mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field"
+                placeholder="••••••••"
+                autoComplete="current-password"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-text-dark mb-2">
+                Role
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="receptionist"
+                    checked={role === 'receptionist'}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-4 h-4 text-primary focus:ring-primary"
+                  />
+                  <span>Receptionist</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="doctor"
+                    checked={role === 'doctor'}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-4 h-4 text-primary focus:ring-primary"
+                  />
+                  <span>Doctor</span>
+                </label>
+              </div>
+            </div>
+
+            {error && (
+              <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full py-3"
+            >
+              {loading ? 'Signing in...' : 'Sign in'}
+            </button>
+
+            <a
+              href="#"
+              className="block text-center text-sm text-primary hover:underline"
+            >
+              Forgot password?
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+}

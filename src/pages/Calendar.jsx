@@ -1,0 +1,237 @@
+import { useState, useMemo } from 'react'
+import Modal from '../components/Modal'
+import AppointmentCard from '../components/AppointmentCard'
+import { useAppointments } from '../context/AppointmentsContext'
+
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+
+export default function Calendar() {
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const { getAppointmentsByDate } = useAppointments()
+
+  const year = currentDate.getFullYear()
+  const month = currentDate.getMonth()
+
+  const calendarDays = useMemo(() => {
+    const firstDay = new Date(year, month, 1)
+    const lastDay = new Date(year, month + 1, 0)
+    const startPad = firstDay.getDay()
+    const daysInMonth = lastDay.getDate()
+
+    const days = []
+    for (let i = 0; i < startPad; i++) {
+      days.push(null)
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      days.push(new Date(year, month, d))
+    }
+    return days
+  }, [year, month])
+
+  const formatDateKey = (d) => {
+    if (!d) return ''
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  }
+
+  const appointmentsForSelected = useMemo(() => {
+    if (!selectedDate) return []
+    const key = formatDateKey(selectedDate)
+    return getAppointmentsByDate(key)
+  }, [selectedDate, getAppointmentsByDate])
+
+  const getAppointmentCount = (d) => {
+    if (!d) return 0
+    const key = formatDateKey(d)
+    return getAppointmentsByDate(key).length
+  }
+
+  const isToday = (d) => {
+    if (!d) return false
+    const t = new Date()
+    return d.getDate() === t.getDate() && d.getMonth() === t.getMonth() && d.getFullYear() === t.getFullYear()
+  }
+
+  const isSelected = (d) => {
+    if (!d || !selectedDate) return false
+    return formatDateKey(d) === formatDateKey(selectedDate)
+  }
+
+  const prevMonth = () => {
+    setCurrentDate(new Date(year, month - 1))
+  }
+
+  const nextMonth = () => {
+    setCurrentDate(new Date(year, month + 1))
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-text-dark">Calendar</h1>
+        <p className="text-text-muted mt-1">View appointments by date</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 card">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-text-dark">
+              {MONTHS[month]} {year}
+            </h2>
+            <div className="flex gap-2">
+              <button
+                onClick={prevMonth}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label="Previous month"
+              >
+                <ChevronLeftIcon className="w-5 h-5" />
+              </button>
+              <button
+                onClick={nextMonth}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label="Next month"
+              >
+                <ChevronRightIcon className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-7 gap-1 mb-2">
+            {DAYS.map((day) => (
+              <div
+                key={day}
+                className="text-center text-xs font-medium text-text-muted py-2"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-1">
+            {calendarDays.map((d, i) => (
+              <button
+                key={i}
+                onClick={() => d && setSelectedDate(d)}
+                disabled={!d}
+                className={`
+                  aspect-square p-1 rounded-lg text-sm transition-colors
+                  ${!d ? 'invisible' : ''}
+                  ${isSelected(d) ? 'bg-primary text-white' : ''}
+                  ${!isSelected(d) && isToday(d) ? 'ring-2 ring-primary' : ''}
+                  ${!isSelected(d) && !isToday(d) ? 'hover:bg-gray-100' : ''}
+                `}
+              >
+                {d?.getDate()}
+                {getAppointmentCount(d) > 0 && (
+                  <span className={`block text-[10px] mt-0.5 ${isSelected(d) ? 'text-white/90' : 'text-primary'}`}>
+                    {getAppointmentCount(d)} apt{getAppointmentCount(d) > 1 ? 's' : ''}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="card">
+          <h2 className="text-lg font-semibold text-text-dark mb-4">
+            {selectedDate
+              ? selectedDate.toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })
+              : 'Select a date'}
+          </h2>
+          {selectedDate ? (
+            appointmentsForSelected.length > 0 ? (
+              <div className="space-y-3">
+                {appointmentsForSelected.map((apt) => (
+                  <AppointmentCard
+                    key={apt.id}
+                    appointment={apt}
+                    onClick={() => setSelectedAppointment(apt)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-text-muted text-sm py-8 text-center">
+                No appointments for this date
+              </p>
+            )
+          ) : (
+            <p className="text-text-muted text-sm py-8 text-center">
+              Click a date to view appointments
+            </p>
+          )}
+        </div>
+      </div>
+
+      <Modal
+        isOpen={!!selectedAppointment}
+        onClose={() => setSelectedAppointment(null)}
+        title="Appointment Details"
+      >
+        {selectedAppointment && (
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm text-text-muted">Patient</p>
+              <p className="font-medium">{selectedAppointment.patientName}</p>
+              {selectedAppointment.patientEmail && (
+                <p className="text-sm text-text-muted">{selectedAppointment.patientEmail}</p>
+              )}
+              {selectedAppointment.patientPhone && (
+                <p className="text-sm text-text-muted">{selectedAppointment.patientPhone}</p>
+              )}
+            </div>
+            <div>
+              <p className="text-sm text-text-muted">Doctor</p>
+              <p className="font-medium">{selectedAppointment.doctor}</p>
+            </div>
+            <div>
+              <p className="text-sm text-text-muted">Date & Time</p>
+              <p className="font-medium">
+                {new Date(selectedAppointment.date).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}{' '}
+                at{' '}
+                {selectedAppointment.time
+                  ? `${parseInt(selectedAppointment.time.split(':')[0], 10) % 12 || 12}:${selectedAppointment.time.split(':')[1]} ${parseInt(selectedAppointment.time.split(':')[0], 10) >= 12 ? 'PM' : 'AM'}`
+                  : '—'}
+              </p>
+            </div>
+            {selectedAppointment.reason && (
+              <div>
+                <p className="text-sm text-text-muted">Reason</p>
+                <p className="font-medium">{selectedAppointment.reason}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
+    </div>
+  )
+}
+
+function ChevronLeftIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+  )
+}
+
+function ChevronRightIcon({ className }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    </svg>
+  )
+}
