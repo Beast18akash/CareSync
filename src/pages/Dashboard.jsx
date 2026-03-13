@@ -2,27 +2,25 @@ import { useMemo } from 'react'
 import { StatCard, PageHeader } from '../components/ui'
 import AppointmentTable from '../components/AppointmentTable'
 import { useAppointments } from '../context/AppointmentsContext'
-import { CalendarDays, CheckCircle2, XCircle, Users } from 'lucide-react'
+import { CalendarDays, Stethoscope, Users, CheckCircle2 } from 'lucide-react'
 
 export default function Dashboard() {
-  const { appointments, patients } = useAppointments()
+  const { appointments, patients, DOCTORS } = useAppointments()
 
   const todayStr = new Date().toISOString().split('T')[0]
 
   const stats = useMemo(() => {
     const today = appointments.filter((a) => a.date === todayStr)
     const totalToday = today.length
-    const upcoming = today.filter((a) => a.status === 'booked').length
-    const cancelled = appointments.filter((a) => a.status === 'cancelled').length
-    const totalPatients = patients.length
+    const completed = appointments.filter((a) => a.status === 'completed').length
 
     return {
-      totalToday,
-      upcoming,
-      cancelled,
-      totalPatients,
+      todayAppointments: totalToday,
+      activeDoctors: DOCTORS.length,
+      totalPatients: patients.length,
+      completedConsultations: completed,
     }
-  }, [appointments, patients, todayStr])
+  }, [appointments, patients, todayStr, DOCTORS])
 
   const todayAppointments = useMemo(
     () =>
@@ -35,35 +33,35 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       <PageHeader
-        title="Dashboard"
-        subtitle="Overview of your clinic today"
+        title="Hospital Operations Overview"
+        subtitle="Real-time clinic performance and today's schedule"
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Total Appointments Today"
-          value={stats.totalToday}
+          title="Today's Appointments"
+          value={stats.todayAppointments}
           icon={CalendarDays}
           color="primary"
-        />
-        <StatCard
-          title="Upcoming"
-          value={stats.upcoming}
-          icon={CheckCircle2}
-          color="green"
           trend="Scheduled for today"
         />
         <StatCard
-          title="Cancelled"
-          value={stats.cancelled}
-          icon={XCircle}
-          color="red"
+          title="Active Doctors"
+          value={stats.activeDoctors}
+          icon={Stethoscope}
+          color="secondary"
         />
         <StatCard
           title="Total Patients"
           value={stats.totalPatients}
           icon={Users}
-          color="blue"
+          color="success"
+        />
+        <StatCard
+          title="Completed Consultations"
+          value={stats.completedConsultations}
+          icon={CheckCircle2}
+          color="success"
         />
       </div>
 

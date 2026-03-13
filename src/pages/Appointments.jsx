@@ -19,6 +19,7 @@ export default function Appointments() {
   const [filterStatus, setFilterStatus] = useState('')
   const [filterDate, setFilterDate] = useState('')
   const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const [viewModalOpen, setViewModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editData, setEditData] = useState({})
 
@@ -35,6 +36,11 @@ export default function Appointments() {
     })
   }, [appointments, search, filterDoctor, filterStatus, filterDate])
 
+  const handleView = (apt) => {
+    setSelectedAppointment(apt)
+    setViewModalOpen(true)
+  }
+
   const handleEdit = (apt) => {
     setSelectedAppointment(apt)
     setEditData({
@@ -43,6 +49,7 @@ export default function Appointments() {
       time: apt.time,
       reason: apt.reason,
     })
+    setViewModalOpen(false)
     setEditModalOpen(true)
   }
 
@@ -115,12 +122,66 @@ export default function Appointments() {
 
         <AppointmentTable
           appointments={filteredAppointments}
+          onView={handleView}
           onEdit={handleEdit}
           onReschedule={handleEdit}
           onCancel={handleCancel}
           onComplete={handleComplete}
         />
       </div>
+
+      <Modal
+        isOpen={viewModalOpen}
+        onClose={() => setViewModalOpen(false)}
+        title="Appointment Details"
+      >
+        {selectedAppointment && (
+          <div className="space-y-5">
+            <div>
+              <p className="text-sm text-text-muted">Patient</p>
+              <p className="font-semibold text-text-dark mt-1">{selectedAppointment.patientName}</p>
+              {selectedAppointment.patientEmail && (
+                <p className="text-sm text-text-muted">{selectedAppointment.patientEmail}</p>
+              )}
+            </div>
+            <div>
+              <p className="text-sm text-text-muted">Doctor</p>
+              <p className="font-semibold text-text-dark mt-1">{selectedAppointment.doctor}</p>
+            </div>
+            <div>
+              <p className="text-sm text-text-muted">Date & Time</p>
+              <p className="font-semibold text-text-dark mt-1">
+                {new Date(selectedAppointment.date).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}{' '}
+                at{' '}
+                {selectedAppointment.time
+                  ? `${parseInt(selectedAppointment.time.split(':')[0], 10) % 12 || 12}:${selectedAppointment.time.split(':')[1]} ${parseInt(selectedAppointment.time.split(':')[0], 10) >= 12 ? 'PM' : 'AM'}`
+                  : '—'}
+              </p>
+            </div>
+            {selectedAppointment.reason && (
+              <div>
+                <p className="text-sm text-text-muted">Reason</p>
+                <p className="font-medium text-text-dark mt-1">{selectedAppointment.reason}</p>
+              </div>
+            )}
+            {selectedAppointment.status === 'booked' && (
+              <div className="flex gap-3 pt-4">
+                <button onClick={() => handleEdit(selectedAppointment)} className="btn-primary flex-1">
+                  Reschedule
+                </button>
+                <button onClick={() => setViewModalOpen(false)} className="btn-secondary flex-1">
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
 
       <Modal
         isOpen={editModalOpen}

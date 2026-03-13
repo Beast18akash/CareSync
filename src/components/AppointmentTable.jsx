@@ -1,10 +1,24 @@
 import StatusBadge from './StatusBadge'
 import { EmptyState } from './ui'
-import { ClipboardList } from 'lucide-react'
-import { Edit2, CalendarClock, CheckCircle, XCircle } from 'lucide-react'
+import { ClipboardList, Eye, CalendarClock, XCircle } from 'lucide-react'
+
+function Avatar({ name, className = 'h-9 w-9' }) {
+  const initials = name
+    ?.split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || '?'
+  return (
+    <div className={`${className} shrink-0 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-sm`}>
+      {initials}
+    </div>
+  )
+}
 
 export default function AppointmentTable({
   appointments,
+  onView,
   onEdit,
   onReschedule,
   onCancel,
@@ -17,8 +31,8 @@ export default function AppointmentTable({
       <div className="py-12">
         <EmptyState
           icon={ClipboardList}
-          title="No appointments found"
-          description="Appointments will appear here when they are scheduled."
+          title="No appointments scheduled today"
+          description="Appointments will appear here when they are booked. Schedule a new appointment to get started."
         />
       </div>
     )
@@ -41,13 +55,14 @@ export default function AppointmentTable({
   const ActionButton = ({ onClick, children, icon: Icon, variant = 'primary' }) => {
     const variants = {
       primary: 'hover:bg-primary/10 text-primary',
-      green: 'hover:bg-emerald-500/10 text-emerald-600',
-      red: 'hover:bg-rose-500/10 text-rose-600',
+      secondary: 'hover:bg-secondary/10 text-secondary',
+      success: 'hover:bg-success/10 text-success',
+      danger: 'hover:bg-danger/10 text-danger',
     }
     return (
       <button
         onClick={onClick}
-        className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors ${variants[variant]}`}
+        className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors ${variants[variant] || variants.primary}`}
       >
         {Icon && <Icon className="h-4 w-4" strokeWidth={2} />}
         {children}
@@ -57,7 +72,7 @@ export default function AppointmentTable({
 
   return (
     <div className="overflow-x-auto -mx-2">
-      <table className="w-full min-w-[600px]">
+      <table className="w-full min-w-[700px]">
         <thead>
           <tr className="border-b border-slate-200">
             {columns.includes('patient') && (
@@ -100,14 +115,24 @@ export default function AppointmentTable({
             >
               {columns.includes('patient') && (
                 <td className="py-4 px-4">
-                  <p className="font-medium text-text-dark">{apt.patientName}</p>
-                  {apt.patientEmail && (
-                    <p className="text-sm text-text-muted mt-0.5">{apt.patientEmail}</p>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <Avatar name={apt.patientName} />
+                    <div>
+                      <p className="font-medium text-text-dark">{apt.patientName}</p>
+                      {apt.patientEmail && (
+                        <p className="text-sm text-text-muted mt-0.5">{apt.patientEmail}</p>
+                      )}
+                    </div>
+                  </div>
                 </td>
               )}
               {columns.includes('doctor') && (
-                <td className="py-4 px-4 text-text-dark">{apt.doctor}</td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    <Avatar name={apt.doctor} className="h-8 w-8" />
+                    <span className="text-text-dark">{apt.doctor}</span>
+                  </div>
+                </td>
               )}
               {columns.includes('date') && (
                 <td className="py-4 px-4 text-text-dark">{formatDate(apt.date)}</td>
@@ -125,9 +150,9 @@ export default function AppointmentTable({
                   <div className="flex items-center justify-end gap-1 flex-wrap">
                     {apt.status === 'booked' && (
                       <>
-                        {onEdit && (
-                          <ActionButton onClick={() => onEdit(apt)} icon={Edit2}>
-                            Edit
+                        {onView && (
+                          <ActionButton onClick={() => onView(apt)} icon={Eye}>
+                            View
                           </ActionButton>
                         )}
                         {onReschedule && (
@@ -135,27 +160,29 @@ export default function AppointmentTable({
                             Reschedule
                           </ActionButton>
                         )}
+                        {onEdit && (
+                          <ActionButton onClick={() => onEdit(apt)} icon={CalendarClock}>
+                            Edit
+                          </ActionButton>
+                        )}
                         {onComplete && (
-                          <ActionButton
-                            onClick={() => onComplete(apt)}
-                            icon={CheckCircle}
-                            variant="green"
-                          >
+                          <ActionButton onClick={() => onComplete(apt)} icon={Eye} variant="success">
                             Complete
                           </ActionButton>
                         )}
                         {onCancel && (
-                          <ActionButton
-                            onClick={() => onCancel(apt)}
-                            icon={XCircle}
-                            variant="red"
-                          >
+                          <ActionButton onClick={() => onCancel(apt)} icon={XCircle} variant="danger">
                             Cancel
                           </ActionButton>
                         )}
                       </>
                     )}
-                    {(apt.status === 'cancelled' || apt.status === 'completed') && (
+                    {(apt.status === 'cancelled' || apt.status === 'completed') && onView && (
+                      <ActionButton onClick={() => onView(apt)} icon={Eye}>
+                        View
+                      </ActionButton>
+                    )}
+                    {(apt.status === 'cancelled' || apt.status === 'completed') && !onView && (
                       <span className="text-sm text-text-muted">—</span>
                     )}
                   </div>

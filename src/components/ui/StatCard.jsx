@@ -2,22 +2,27 @@ const colorConfig = {
   primary: {
     bg: 'bg-primary/10',
     icon: 'text-primary',
+    accent: 'border-l-primary',
   },
-  green: {
-    bg: 'bg-emerald-500/10',
-    icon: 'text-emerald-600',
+  secondary: {
+    bg: 'bg-secondary/10',
+    icon: 'text-secondary',
+    accent: 'border-l-secondary',
   },
-  red: {
-    bg: 'bg-rose-500/10',
-    icon: 'text-rose-600',
+  success: {
+    bg: 'bg-success/10',
+    icon: 'text-success',
+    accent: 'border-l-success',
   },
-  blue: {
-    bg: 'bg-sky-500/10',
-    icon: 'text-sky-600',
+  warning: {
+    bg: 'bg-warning/10',
+    icon: 'text-warning',
+    accent: 'border-l-warning',
   },
-  amber: {
-    bg: 'bg-amber-500/10',
-    icon: 'text-amber-600',
+  danger: {
+    bg: 'bg-danger/10',
+    icon: 'text-danger',
+    accent: 'border-l-danger',
   },
 }
 
@@ -25,7 +30,7 @@ export default function StatCard({ title, value, icon: Icon, trend, color = 'pri
   const config = colorConfig[color] || colorConfig.primary
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200/80 p-6 shadow-sm hover:shadow-md transition-all duration-200 hover:border-slate-200">
+    <div className={`relative overflow-hidden rounded-2xl bg-white border border-slate-200/80 p-6 shadow-card hover:shadow-elevated transition-all duration-300 hover:-translate-y-0.5 border-l-4 ${config.accent}`}>
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-text-muted">{title}</p>

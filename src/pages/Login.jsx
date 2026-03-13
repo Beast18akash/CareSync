@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Stethoscope } from 'lucide-react'
-
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,10 +35,12 @@ export default function Login() {
         <div className="card">
           <div className="text-center mb-8">
             <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white mb-4">
-              <Stethoscope className="h-7 w-7" strokeWidth={2} />
+              <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2v20M2 12h20M12 6v12M6 12h12" />
+              </svg>
             </div>
-            <h1 className="text-2xl font-bold text-text-dark">ClinicPro</h1>
-            <p className="text-text-muted mt-1.5 text-sm">Doctor Appointment System</p>
+            <h1 className="text-2xl font-bold text-text-dark">CareSync</h1>
+            <p className="text-text-muted mt-1.5 text-sm">Clinic Dashboard</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">

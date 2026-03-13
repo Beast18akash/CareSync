@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react'
-import { mockAppointments, mockPatients, DOCTORS, TIME_SLOTS } from '../data/mockData'
+import { mockAppointments, mockPatients, DOCTORS, TIME_SLOTS, DOCTOR_PROFILES } from '../data/mockData'
 
 const AppointmentsContext = createContext(null)
 
@@ -73,6 +73,7 @@ export function AppointmentsProvider({ children }) {
     getBookedSlots,
     getAppointmentsByDate,
     DOCTORS,
+    DOCTOR_PROFILES,
     TIME_SLOTS,
   }
 

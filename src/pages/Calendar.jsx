@@ -11,6 +11,13 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December',
 ]
 
+const DOCTOR_COLORS = {
+  'Dr. Sarah Johnson': 'bg-primary',
+  'Dr. Michael Chen': 'bg-secondary',
+  'Dr. Emily Davis': 'bg-success',
+  'Dr. James Wilson': 'bg-warning',
+}
+
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState(null)
@@ -27,9 +34,7 @@ export default function Calendar() {
     const daysInMonth = lastDay.getDate()
 
     const days = []
-    for (let i = 0; i < startPad; i++) {
-      days.push(null)
-    }
+    for (let i = 0; i < startPad; i++) days.push(null)
     for (let d = 1; d <= daysInMonth; d++) {
       days.push(new Date(year, month, d))
     }
@@ -43,14 +48,12 @@ export default function Calendar() {
 
   const appointmentsForSelected = useMemo(() => {
     if (!selectedDate) return []
-    const key = formatDateKey(selectedDate)
-    return getAppointmentsByDate(key)
+    return getAppointmentsByDate(formatDateKey(selectedDate))
   }, [selectedDate, getAppointmentsByDate])
 
   const getAppointmentCount = (d) => {
     if (!d) return 0
-    const key = formatDateKey(d)
-    return getAppointmentsByDate(key).length
+    return getAppointmentsByDate(formatDateKey(d)).length
   }
 
   const isToday = (d) => {
@@ -64,19 +67,11 @@ export default function Calendar() {
     return formatDateKey(d) === formatDateKey(selectedDate)
   }
 
-  const prevMonth = () => {
-    setCurrentDate(new Date(year, month - 1))
-  }
-
-  const nextMonth = () => {
-    setCurrentDate(new Date(year, month + 1))
-  }
-
   return (
     <div className="space-y-8">
       <PageHeader
-        title="Calendar"
-        subtitle="View appointments by date"
+        title="Clinic Scheduling"
+        subtitle="View and manage appointments by date"
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -87,14 +82,14 @@ export default function Calendar() {
             </h2>
             <div className="flex gap-2">
               <button
-                onClick={prevMonth}
+                onClick={() => setCurrentDate(new Date(year, month - 1))}
                 className="p-2.5 rounded-xl hover:bg-slate-100 text-text-muted hover:text-text-dark transition-colors"
                 aria-label="Previous month"
               >
                 <ChevronLeft className="h-5 w-5" strokeWidth={2} />
               </button>
               <button
-                onClick={nextMonth}
+                onClick={() => setCurrentDate(new Date(year, month + 1))}
                 className="p-2.5 rounded-xl hover:bg-slate-100 text-text-muted hover:text-text-dark transition-colors"
                 aria-label="Next month"
               >
@@ -105,10 +100,7 @@ export default function Calendar() {
 
           <div className="grid grid-cols-7 gap-1 mb-3">
             {DAYS.map((day) => (
-              <div
-                key={day}
-                className="text-center text-xs font-semibold text-text-muted py-2"
-              >
+              <div key={day} className="text-center text-xs font-semibold text-text-muted py-2">
                 {day}
               </div>
             ))}
@@ -122,15 +114,16 @@ export default function Calendar() {
                 className={`
                   aspect-square p-1 rounded-xl text-sm font-medium transition-all
                   ${!d ? 'invisible' : ''}
-                  ${isSelected(d) ? 'bg-primary text-white shadow-sm' : ''}
+                  ${isSelected(d) ? 'bg-primary text-white shadow-md' : ''}
                   ${!isSelected(d) && isToday(d) ? 'ring-2 ring-primary ring-offset-2' : ''}
                   ${!isSelected(d) && !isToday(d) ? 'hover:bg-slate-100' : ''}
                 `}
               >
                 {d?.getDate()}
                 {getAppointmentCount(d) > 0 && (
-                  <span className={`block text-[10px] mt-0.5 font-normal ${isSelected(d) ? 'text-white/90' : 'text-primary'}`}>
-                    {getAppointmentCount(d)} apt{getAppointmentCount(d) > 1 ? 's' : ''}
+                  <span className={`block text-[10px] mt-0.5 font-normal flex items-center justify-center gap-1 ${isSelected(d) ? 'text-white/90' : 'text-primary'}`}>
+                    <span className={`inline-block w-1.5 h-1.5 rounded-full ${isSelected(d) ? 'bg-white/80' : 'bg-primary'}`} />
+                    {getAppointmentCount(d)}
                   </span>
                 )}
               </button>
@@ -139,7 +132,7 @@ export default function Calendar() {
         </div>
 
         <div className="card">
-          <h2 className="text-lg font-semibold text-text-dark mb-5">
+          <h2 className="text-lg font-semibold text-text-dark mb-4">
             {selectedDate
               ? selectedDate.toLocaleDateString('en-US', {
                   weekday: 'long',
@@ -153,11 +146,15 @@ export default function Calendar() {
             appointmentsForSelected.length > 0 ? (
               <div className="space-y-3">
                 {appointmentsForSelected.map((apt) => (
-                  <AppointmentCard
-                    key={apt.id}
-                    appointment={apt}
-                    onClick={() => setSelectedAppointment(apt)}
-                  />
+                  <div key={apt.id} className="relative">
+                    <span className={`absolute left-0 top-4 w-1 h-8 rounded-full ${DOCTOR_COLORS[apt.doctor] || 'bg-slate-300'}`} />
+                    <div className="pl-4">
+                      <AppointmentCard
+                        appointment={apt}
+                        onClick={() => setSelectedAppointment(apt)}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -182,21 +179,18 @@ export default function Calendar() {
           <div className="space-y-5">
             <div>
               <p className="text-sm text-text-muted">Patient</p>
-              <p className="font-medium text-text-dark mt-1">{selectedAppointment.patientName}</p>
+              <p className="font-semibold text-text-dark mt-1">{selectedAppointment.patientName}</p>
               {selectedAppointment.patientEmail && (
                 <p className="text-sm text-text-muted mt-0.5">{selectedAppointment.patientEmail}</p>
-              )}
-              {selectedAppointment.patientPhone && (
-                <p className="text-sm text-text-muted">{selectedAppointment.patientPhone}</p>
               )}
             </div>
             <div>
               <p className="text-sm text-text-muted">Doctor</p>
-              <p className="font-medium text-text-dark mt-1">{selectedAppointment.doctor}</p>
+              <p className="font-semibold text-text-dark mt-1">{selectedAppointment.doctor}</p>
             </div>
             <div>
               <p className="text-sm text-text-muted">Date & Time</p>
-              <p className="font-medium text-text-dark mt-1">
+              <p className="font-semibold text-text-dark mt-1">
                 {new Date(selectedAppointment.date).toLocaleDateString('en-US', {
                   weekday: 'long',
                   month: 'long',

@@ -12,7 +12,11 @@ export default {
           light: '#E0F2FE',
           dark: '#1D4ED8',
         },
-        background: '#F1F5F9',
+        secondary: '#0EA5E9',
+        success: '#10B981',
+        warning: '#F59E0B',
+        danger: '#EF4444',
+        background: '#F8FAFC',
         card: '#FFFFFF',
         text: {
           dark: '#0F172A',
@@ -26,6 +30,7 @@ export default {
         'soft': '0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05)',
         'card': '0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05)',
         'elevated': '0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
+        'navbar': '0 1px 3px 0 rgb(0 0 0 / 0.04)',
       },
       borderRadius: {
         'xl': '0.75rem',

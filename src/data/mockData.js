@@ -1,5 +1,12 @@
 const DOCTORS = ['Dr. Sarah Johnson', 'Dr. Michael Chen', 'Dr. Emily Davis', 'Dr. James Wilson']
 
+export const DOCTOR_PROFILES = [
+  { name: 'Dr. Sarah Johnson', specialization: 'General Practice', available: 'Mon–Fri, 9AM–5PM' },
+  { name: 'Dr. Michael Chen', specialization: 'Cardiology', available: 'Tue–Thu, 10AM–4PM' },
+  { name: 'Dr. Emily Davis', specialization: 'Pediatrics', available: 'Mon–Wed, 8AM–2PM' },
+  { name: 'Dr. James Wilson', specialization: 'Dermatology', available: 'Mon–Fri, 2PM–6PM' },
+]
+
 const TIME_SLOTS = [
   '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
   '14:00', '14:30', '15:00', '15:30', '16:00', '16:30',

@@ -5,18 +5,23 @@ const statusConfig = {
     label: 'Booked',
   },
   completed: {
-    bg: 'bg-emerald-500/10',
-    text: 'text-emerald-700',
+    bg: 'bg-success/10',
+    text: 'text-success',
     label: 'Completed',
   },
   cancelled: {
-    bg: 'bg-rose-500/10',
-    text: 'text-rose-700',
+    bg: 'bg-danger/10',
+    text: 'text-danger',
     label: 'Cancelled',
   },
+  rescheduled: {
+    bg: 'bg-warning/10',
+    text: 'text-warning',
+    label: 'Rescheduled',
+  },
   pending: {
-    bg: 'bg-amber-500/10',
-    text: 'text-amber-700',
+    bg: 'bg-warning/10',
+    text: 'text-warning',
     label: 'Pending',
   },
 }

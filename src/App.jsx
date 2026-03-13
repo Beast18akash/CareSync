@@ -8,6 +8,8 @@ import BookAppointment from './pages/BookAppointment'
 import Appointments from './pages/Appointments'
 import Calendar from './pages/Calendar'
 import Patients from './pages/Patients'
+import Doctors from './pages/Doctors'
+import Reports from './pages/Reports'
 import Settings from './pages/Settings'
 
 function ProtectedRoute({ children }) {
@@ -48,8 +50,10 @@ function AppRoutes() {
         <Route index element={<Dashboard />} />
         <Route path="book-appointment" element={<BookAppointment />} />
         <Route path="appointments" element={<Appointments />} />
-        <Route path="calendar" element={<Calendar />} />
+        <Route path="doctors" element={<Doctors />} />
         <Route path="patients" element={<Patients />} />
+        <Route path="calendar" element={<Calendar />} />
+        <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
