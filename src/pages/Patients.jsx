@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react'
 import Modal from '../components/Modal'
+import { PageHeader } from '../components/ui'
 import { useAppointments } from '../context/AppointmentsContext'
+import { Plus, Search } from 'lucide-react'
 
 export default function Patients() {
   const { patients, addPatient } = useAppointments()
@@ -39,42 +41,57 @@ export default function Patients() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-text-dark">Patients</h1>
-          <p className="text-text-muted mt-1">Manage patient records</p>
-        </div>
-        <button
-          onClick={() => setAddModalOpen(true)}
-          className="btn-primary flex items-center gap-2 w-fit"
-        >
-          <PlusIcon className="w-5 h-5" />
-          Add Patient
-        </button>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        title="Patients"
+        subtitle="Manage patient records"
+        action={
+          <button
+            onClick={() => setAddModalOpen(true)}
+            className="btn-primary"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2} />
+            Add Patient
+          </button>
+        }
+      />
 
       <div className="card">
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Search by name, email, or phone..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="input-field max-w-md"
-          />
+        <div className="mb-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" strokeWidth={1.75} />
+            <input
+              type="text"
+              placeholder="Search by name, email, or phone..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="input-field pl-10"
+            />
+          </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className="overflow-x-auto -mx-2">
+          <table className="w-full min-w-[600px]">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Patient Name</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Phone</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Email</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Last Visit</th>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Upcoming Appointment</th>
-                <th className="text-right py-4 px-4 text-sm font-semibold text-text-muted">Actions</th>
+              <tr className="border-b border-slate-200">
+                <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                  Patient Name
+                </th>
+                <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                  Phone
+                </th>
+                <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                  Last Visit
+                </th>
+                <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                  Upcoming
+                </th>
+                <th className="text-right py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -88,7 +105,7 @@ export default function Patients() {
                 filteredPatients.map((patient) => (
                   <tr
                     key={patient.id}
-                    className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
+                    className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors"
                   >
                     <td className="py-4 px-4">
                       <p className="font-medium text-text-dark">{patient.name}</p>
@@ -118,7 +135,7 @@ export default function Patients() {
         onClose={() => setAddModalOpen(false)}
         title="Add Patient"
       >
-        <form onSubmit={handleAddPatient} className="space-y-4">
+        <form onSubmit={handleAddPatient} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-text-dark mb-2">Name *</label>
             <input
@@ -173,38 +190,30 @@ export default function Patients() {
         title="Patient Details"
       >
         {selectedPatient && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div>
               <p className="text-sm text-text-muted">Name</p>
-              <p className="font-medium text-text-dark">{selectedPatient.name}</p>
+              <p className="font-medium text-text-dark mt-1">{selectedPatient.name}</p>
             </div>
             <div>
               <p className="text-sm text-text-muted">Phone</p>
-              <p className="font-medium text-text-dark">{selectedPatient.phone}</p>
+              <p className="font-medium text-text-dark mt-1">{selectedPatient.phone}</p>
             </div>
             <div>
               <p className="text-sm text-text-muted">Email</p>
-              <p className="font-medium text-text-dark">{selectedPatient.email}</p>
+              <p className="font-medium text-text-dark mt-1">{selectedPatient.email}</p>
             </div>
             <div>
               <p className="text-sm text-text-muted">Last Visit</p>
-              <p className="font-medium text-text-dark">{selectedPatient.lastVisit}</p>
+              <p className="font-medium text-text-dark mt-1">{selectedPatient.lastVisit}</p>
             </div>
             <div>
               <p className="text-sm text-text-muted">Upcoming Appointment</p>
-              <p className="font-medium text-text-dark">{selectedPatient.upcomingAppointment}</p>
+              <p className="font-medium text-text-dark mt-1">{selectedPatient.upcomingAppointment}</p>
             </div>
           </div>
         )}
       </Modal>
     </div>
-  )
-}
-
-function PlusIcon({ className }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-    </svg>
   )
 }

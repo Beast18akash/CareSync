@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react'
 import AppointmentTable from '../components/AppointmentTable'
 import Modal from '../components/Modal'
+import { PageHeader } from '../components/ui'
 import { useAppointments } from '../context/AppointmentsContext'
+import { Search } from 'lucide-react'
 
 export default function Appointments() {
   const {
@@ -63,22 +65,22 @@ export default function Appointments() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-text-dark">Appointments</h1>
-        <p className="text-text-muted mt-1">Manage all appointments</p>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        title="Appointments"
+        subtitle="Manage all appointments"
+      />
 
-      <div className="card space-y-4">
-        {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-4 flex-wrap">
-          <div className="flex-1 min-w-[200px]">
+      <div className="card">
+        <div className="flex flex-col sm:flex-row gap-4 flex-wrap mb-6">
+          <div className="flex-1 min-w-[200px] relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" strokeWidth={1.75} />
             <input
               type="text"
               placeholder="Search by patient or doctor..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="input-field"
+              className="input-field pl-10"
             />
           </div>
           <select
@@ -126,7 +128,7 @@ export default function Appointments() {
         title="Edit / Reschedule Appointment"
       >
         {selectedAppointment && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <p className="text-sm text-text-muted">
               Patient: <span className="font-medium text-text-dark">{selectedAppointment.patientName}</span>
             </p>

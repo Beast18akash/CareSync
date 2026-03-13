@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react'
 import Modal from '../components/Modal'
 import AppointmentCard from '../components/AppointmentCard'
+import { PageHeader } from '../components/ui'
 import { useAppointments } from '../context/AppointmentsContext'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = [
@@ -71,11 +73,11 @@ export default function Calendar() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-text-dark">Calendar</h1>
-        <p className="text-text-muted mt-1">View appointments by date</p>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        title="Calendar"
+        subtitle="View appointments by date"
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 card">
@@ -86,48 +88,48 @@ export default function Calendar() {
             <div className="flex gap-2">
               <button
                 onClick={prevMonth}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-2.5 rounded-xl hover:bg-slate-100 text-text-muted hover:text-text-dark transition-colors"
                 aria-label="Previous month"
               >
-                <ChevronLeftIcon className="w-5 h-5" />
+                <ChevronLeft className="h-5 w-5" strokeWidth={2} />
               </button>
               <button
                 onClick={nextMonth}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-2.5 rounded-xl hover:bg-slate-100 text-text-muted hover:text-text-dark transition-colors"
                 aria-label="Next month"
               >
-                <ChevronRightIcon className="w-5 h-5" />
+                <ChevronRight className="h-5 w-5" strokeWidth={2} />
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-7 gap-1 mb-2">
+          <div className="grid grid-cols-7 gap-1 mb-3">
             {DAYS.map((day) => (
               <div
                 key={day}
-                className="text-center text-xs font-medium text-text-muted py-2"
+                className="text-center text-xs font-semibold text-text-muted py-2"
               >
                 {day}
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-1.5">
             {calendarDays.map((d, i) => (
               <button
                 key={i}
                 onClick={() => d && setSelectedDate(d)}
                 disabled={!d}
                 className={`
-                  aspect-square p-1 rounded-lg text-sm transition-colors
+                  aspect-square p-1 rounded-xl text-sm font-medium transition-all
                   ${!d ? 'invisible' : ''}
-                  ${isSelected(d) ? 'bg-primary text-white' : ''}
-                  ${!isSelected(d) && isToday(d) ? 'ring-2 ring-primary' : ''}
-                  ${!isSelected(d) && !isToday(d) ? 'hover:bg-gray-100' : ''}
+                  ${isSelected(d) ? 'bg-primary text-white shadow-sm' : ''}
+                  ${!isSelected(d) && isToday(d) ? 'ring-2 ring-primary ring-offset-2' : ''}
+                  ${!isSelected(d) && !isToday(d) ? 'hover:bg-slate-100' : ''}
                 `}
               >
                 {d?.getDate()}
                 {getAppointmentCount(d) > 0 && (
-                  <span className={`block text-[10px] mt-0.5 ${isSelected(d) ? 'text-white/90' : 'text-primary'}`}>
+                  <span className={`block text-[10px] mt-0.5 font-normal ${isSelected(d) ? 'text-white/90' : 'text-primary'}`}>
                     {getAppointmentCount(d)} apt{getAppointmentCount(d) > 1 ? 's' : ''}
                   </span>
                 )}
@@ -137,7 +139,7 @@ export default function Calendar() {
         </div>
 
         <div className="card">
-          <h2 className="text-lg font-semibold text-text-dark mb-4">
+          <h2 className="text-lg font-semibold text-text-dark mb-5">
             {selectedDate
               ? selectedDate.toLocaleDateString('en-US', {
                   weekday: 'long',
@@ -159,12 +161,12 @@ export default function Calendar() {
                 ))}
               </div>
             ) : (
-              <p className="text-text-muted text-sm py-8 text-center">
+              <p className="text-text-muted text-sm py-12 text-center">
                 No appointments for this date
               </p>
             )
           ) : (
-            <p className="text-text-muted text-sm py-8 text-center">
+            <p className="text-text-muted text-sm py-12 text-center">
               Click a date to view appointments
             </p>
           )}
@@ -177,12 +179,12 @@ export default function Calendar() {
         title="Appointment Details"
       >
         {selectedAppointment && (
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div>
               <p className="text-sm text-text-muted">Patient</p>
-              <p className="font-medium">{selectedAppointment.patientName}</p>
+              <p className="font-medium text-text-dark mt-1">{selectedAppointment.patientName}</p>
               {selectedAppointment.patientEmail && (
-                <p className="text-sm text-text-muted">{selectedAppointment.patientEmail}</p>
+                <p className="text-sm text-text-muted mt-0.5">{selectedAppointment.patientEmail}</p>
               )}
               {selectedAppointment.patientPhone && (
                 <p className="text-sm text-text-muted">{selectedAppointment.patientPhone}</p>
@@ -190,11 +192,11 @@ export default function Calendar() {
             </div>
             <div>
               <p className="text-sm text-text-muted">Doctor</p>
-              <p className="font-medium">{selectedAppointment.doctor}</p>
+              <p className="font-medium text-text-dark mt-1">{selectedAppointment.doctor}</p>
             </div>
             <div>
               <p className="text-sm text-text-muted">Date & Time</p>
-              <p className="font-medium">
+              <p className="font-medium text-text-dark mt-1">
                 {new Date(selectedAppointment.date).toLocaleDateString('en-US', {
                   weekday: 'long',
                   month: 'long',
@@ -210,28 +212,12 @@ export default function Calendar() {
             {selectedAppointment.reason && (
               <div>
                 <p className="text-sm text-text-muted">Reason</p>
-                <p className="font-medium">{selectedAppointment.reason}</p>
+                <p className="font-medium text-text-dark mt-1">{selectedAppointment.reason}</p>
               </div>
             )}
           </div>
         )}
       </Modal>
     </div>
-  )
-}
-
-function ChevronLeftIcon({ className }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-    </svg>
-  )
-}
-
-function ChevronRightIcon({ className }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-    </svg>
   )
 }

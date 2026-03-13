@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react'
+import { PageHeader } from '../components/ui'
 import { useAppointments } from '../context/AppointmentsContext'
+import { CheckCircle } from 'lucide-react'
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -81,15 +83,16 @@ export default function BookAppointment() {
   }
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <div>
-        <h1 className="text-2xl font-bold text-text-dark">Book Appointment</h1>
-        <p className="text-text-muted mt-1">Schedule a new patient appointment</p>
-      </div>
+    <div className="space-y-8 max-w-2xl">
+      <PageHeader
+        title="Book Appointment"
+        subtitle="Schedule a new patient appointment"
+      />
 
-      <form onSubmit={handleSubmit} className="card space-y-5">
+      <form onSubmit={handleSubmit} className="card space-y-6">
         {success && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+          <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm">
+            <CheckCircle className="h-5 w-5 shrink-0" strokeWidth={2} />
             Appointment booked successfully!
           </div>
         )}
@@ -103,11 +106,11 @@ export default function BookAppointment() {
               type="text"
               value={formData.patientName}
               onChange={(e) => handleChange('patientName', e.target.value)}
-              className={`input-field ${errors.patientName ? 'border-red-500' : ''}`}
+              className={`input-field ${errors.patientName ? 'border-rose-300 focus:ring-rose-200' : ''}`}
               placeholder="Full name"
             />
             {errors.patientName && (
-              <p className="text-red-500 text-xs mt-1">{errors.patientName}</p>
+              <p className="text-rose-600 text-xs mt-1.5">{errors.patientName}</p>
             )}
           </div>
 
@@ -119,11 +122,11 @@ export default function BookAppointment() {
               type="tel"
               value={formData.patientPhone}
               onChange={(e) => handleChange('patientPhone', e.target.value)}
-              className={`input-field ${errors.patientPhone ? 'border-red-500' : ''}`}
+              className={`input-field ${errors.patientPhone ? 'border-rose-300 focus:ring-rose-200' : ''}`}
               placeholder="555-0000"
             />
             {errors.patientPhone && (
-              <p className="text-red-500 text-xs mt-1">{errors.patientPhone}</p>
+              <p className="text-rose-600 text-xs mt-1.5">{errors.patientPhone}</p>
             )}
           </div>
         </div>
@@ -136,11 +139,11 @@ export default function BookAppointment() {
             type="email"
             value={formData.patientEmail}
             onChange={(e) => handleChange('patientEmail', e.target.value)}
-            className={`input-field ${errors.patientEmail ? 'border-red-500' : ''}`}
+            className={`input-field ${errors.patientEmail ? 'border-rose-300 focus:ring-rose-200' : ''}`}
             placeholder="patient@email.com"
           />
           {errors.patientEmail && (
-            <p className="text-red-500 text-xs mt-1">{errors.patientEmail}</p>
+            <p className="text-rose-600 text-xs mt-1.5">{errors.patientEmail}</p>
           )}
         </div>
 
@@ -171,10 +174,10 @@ export default function BookAppointment() {
               value={formData.date}
               onChange={(e) => handleChange('date', e.target.value)}
               min={today}
-              className={`input-field ${errors.date ? 'border-red-500' : ''}`}
+              className={`input-field ${errors.date ? 'border-rose-300 focus:ring-rose-200' : ''}`}
             />
             {errors.date && (
-              <p className="text-red-500 text-xs mt-1">{errors.date}</p>
+              <p className="text-rose-600 text-xs mt-1.5">{errors.date}</p>
             )}
           </div>
 
@@ -192,12 +195,12 @@ export default function BookAppointment() {
                     type="button"
                     onClick={() => !isBooked && handleChange('time', slot)}
                     disabled={isBooked}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    className={`px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                       isBooked
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
                         : isSelected
-                        ? 'bg-primary text-white'
-                        : 'bg-gray-100 text-text-dark hover:bg-primary-light hover:text-primary'
+                        ? 'bg-primary text-white shadow-sm'
+                        : 'bg-slate-100 text-text-dark hover:bg-primary/10 hover:text-primary'
                     }`}
                   >
                     {parseInt(slot.split(':')[0], 10) % 12 || 12}:{slot.split(':')[1]}{' '}
@@ -207,7 +210,7 @@ export default function BookAppointment() {
               })}
             </div>
             {errors.time && (
-              <p className="text-red-500 text-xs mt-1">{errors.time}</p>
+              <p className="text-rose-600 text-xs mt-1.5">{errors.time}</p>
             )}
           </div>
         </div>

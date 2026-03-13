@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { Stethoscope } from 'lucide-react'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -31,12 +32,15 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <div className="card">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-primary">ClinicPro</h1>
-            <p className="text-text-muted mt-1">Doctor Appointment System</p>
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white mb-4">
+              <Stethoscope className="h-7 w-7" strokeWidth={2} />
+            </div>
+            <h1 className="text-2xl font-bold text-text-dark">ClinicPro</h1>
+            <p className="text-text-muted mt-1.5 text-sm">Doctor Appointment System</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -76,8 +80,8 @@ export default function Login() {
               <label className="block text-sm font-medium text-text-dark mb-2">
                 Role
               </label>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div className="flex gap-6">
+                <label className="flex items-center gap-2.5 cursor-pointer">
                   <input
                     type="radio"
                     name="role"
@@ -86,9 +90,9 @@ export default function Login() {
                     onChange={(e) => setRole(e.target.value)}
                     className="w-4 h-4 text-primary focus:ring-primary"
                   />
-                  <span>Receptionist</span>
+                  <span className="text-sm font-medium">Receptionist</span>
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label className="flex items-center gap-2.5 cursor-pointer">
                   <input
                     type="radio"
                     name="role"
@@ -97,13 +101,13 @@ export default function Login() {
                     onChange={(e) => setRole(e.target.value)}
                     className="w-4 h-4 text-primary focus:ring-primary"
                   />
-                  <span>Doctor</span>
+                  <span className="text-sm font-medium">Doctor</span>
                 </label>
               </div>
             </div>
 
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
+              <p className="text-sm text-rose-600 bg-rose-50 p-3 rounded-xl border border-rose-100">{error}</p>
             )}
 
             <button

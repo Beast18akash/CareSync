@@ -1,4 +1,7 @@
 import StatusBadge from './StatusBadge'
+import { EmptyState } from './ui'
+import { ClipboardList } from 'lucide-react'
+import { Edit2, CalendarClock, CheckCircle, XCircle } from 'lucide-react'
 
 export default function AppointmentTable({
   appointments,
@@ -11,8 +14,12 @@ export default function AppointmentTable({
 }) {
   if (!appointments?.length) {
     return (
-      <div className="card text-center py-12">
-        <p className="text-text-muted">No appointments found</p>
+      <div className="py-12">
+        <EmptyState
+          icon={ClipboardList}
+          title="No appointments found"
+          description="Appointments will appear here when they are scheduled."
+        />
       </div>
     )
   }
@@ -23,7 +30,7 @@ export default function AppointmentTable({
   }
 
   const formatTime = (time) => {
-    if (!time) return '-'
+    if (!time) return '—'
     const [h, m] = time.split(':')
     const hour = parseInt(h, 10)
     const ampm = hour >= 12 ? 'PM' : 'AM'
@@ -31,28 +38,57 @@ export default function AppointmentTable({
     return `${hour12}:${m} ${ampm}`
   }
 
+  const ActionButton = ({ onClick, children, icon: Icon, variant = 'primary' }) => {
+    const variants = {
+      primary: 'hover:bg-primary/10 text-primary',
+      green: 'hover:bg-emerald-500/10 text-emerald-600',
+      red: 'hover:bg-rose-500/10 text-rose-600',
+    }
+    return (
+      <button
+        onClick={onClick}
+        className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors ${variants[variant]}`}
+      >
+        {Icon && <Icon className="h-4 w-4" strokeWidth={2} />}
+        {children}
+      </button>
+    )
+  }
+
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
+    <div className="overflow-x-auto -mx-2">
+      <table className="w-full min-w-[600px]">
         <thead>
-          <tr className="border-b border-gray-200">
+          <tr className="border-b border-slate-200">
             {columns.includes('patient') && (
-              <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Patient</th>
+              <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Patient
+              </th>
             )}
             {columns.includes('doctor') && (
-              <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Doctor</th>
+              <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Doctor
+              </th>
             )}
             {columns.includes('date') && (
-              <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Date</th>
+              <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Date
+              </th>
             )}
             {columns.includes('time') && (
-              <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Time</th>
+              <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Time
+              </th>
             )}
             {columns.includes('status') && (
-              <th className="text-left py-4 px-4 text-sm font-semibold text-text-muted">Status</th>
+              <th className="text-left py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Status
+              </th>
             )}
             {showActions && columns.includes('actions') && (
-              <th className="text-right py-4 px-4 text-sm font-semibold text-text-muted">Actions</th>
+              <th className="text-right py-4 px-4 text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Actions
+              </th>
             )}
           </tr>
         </thead>
@@ -60,13 +96,13 @@ export default function AppointmentTable({
           {appointments.map((apt) => (
             <tr
               key={apt.id}
-              className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
+              className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors"
             >
               {columns.includes('patient') && (
                 <td className="py-4 px-4">
                   <p className="font-medium text-text-dark">{apt.patientName}</p>
                   {apt.patientEmail && (
-                    <p className="text-sm text-text-muted">{apt.patientEmail}</p>
+                    <p className="text-sm text-text-muted mt-0.5">{apt.patientEmail}</p>
                   )}
                 </td>
               )}
@@ -85,52 +121,41 @@ export default function AppointmentTable({
                 </td>
               )}
               {showActions && columns.includes('actions') && (
-                <td className="py-4 px-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
+                <td className="py-4 px-4">
+                  <div className="flex items-center justify-end gap-1 flex-wrap">
                     {apt.status === 'booked' && (
                       <>
                         {onEdit && (
-                          <button
-                            onClick={() => onEdit(apt)}
-                            className="p-2 rounded-lg hover:bg-primary-light text-primary text-sm"
-                            title="Edit"
-                          >
+                          <ActionButton onClick={() => onEdit(apt)} icon={Edit2}>
                             Edit
-                          </button>
+                          </ActionButton>
                         )}
                         {onReschedule && (
-                          <button
-                            onClick={() => onReschedule(apt)}
-                            className="p-2 rounded-lg hover:bg-primary-light text-primary text-sm"
-                            title="Reschedule"
-                          >
+                          <ActionButton onClick={() => onReschedule(apt)} icon={CalendarClock}>
                             Reschedule
-                          </button>
+                          </ActionButton>
                         )}
                         {onComplete && (
-                          <button
+                          <ActionButton
                             onClick={() => onComplete(apt)}
-                            className="p-2 rounded-lg hover:bg-green-100 text-green-600 text-sm"
-                            title="Mark completed"
+                            icon={CheckCircle}
+                            variant="green"
                           >
                             Complete
-                          </button>
+                          </ActionButton>
                         )}
                         {onCancel && (
-                          <button
+                          <ActionButton
                             onClick={() => onCancel(apt)}
-                            className="p-2 rounded-lg hover:bg-red-100 text-red-600 text-sm"
-                            title="Cancel"
+                            icon={XCircle}
+                            variant="red"
                           >
                             Cancel
-                          </button>
+                          </ActionButton>
                         )}
                       </>
                     )}
-                    {apt.status === 'cancelled' && (
-                      <span className="text-sm text-text-muted">—</span>
-                    )}
-                    {apt.status === 'completed' && (
+                    {(apt.status === 'cancelled' || apt.status === 'completed') && (
                       <span className="text-sm text-text-muted">—</span>
                     )}
                   </div>
