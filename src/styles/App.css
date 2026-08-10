@@ -43,3 +43,9 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
 }
+
+/* Subtle pattern overlay for background */
+.bg-pattern {
+  background-image: radial-gradient(#E3E9E3 1px, transparent 1px);
+  background-size: 24px 24px;
+}

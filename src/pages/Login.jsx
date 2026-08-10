@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { LoginIllustration } from '../components/illustrations'
+import logo from '../assets/logo.png'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -32,126 +32,126 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-cyan-50/40 flex">
-      {/* Left: Hero with illustration */}
-      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 flex-col justify-center items-center p-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/5 via-transparent to-[#38BDF8]/5" />
-        <div className="relative z-10 max-w-lg w-full animate-fade-in-up">
-          <div className="mb-8">
-            <h1 className="text-4xl xl:text-5xl font-bold bg-gradient-to-r from-[#2563EB] to-[#38BDF8] bg-clip-text text-transparent leading-tight">
-              Smart Clinic Appointment System
-            </h1>
-            <p className="text-lg text-text-muted mt-4 leading-relaxed">
-              Streamline your clinic operations with an intelligent scheduling platform. 
-              Manage appointments, patients, and doctors — all in one place.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 backdrop-blur-sm border border-slate-200/80 shadow-soft">
-              <span className="w-2 h-2 rounded-full bg-success animate-pulse-soft" />
-              <span className="text-sm font-medium text-text-dark">Real-time scheduling</span>
+    <div className="bg-background-subtle min-h-screen w-full flex items-center justify-center relative overflow-hidden font-sans text-text-primary">
+      {/* Ambient Background Elements */}
+      <div className="absolute inset-0 bg-pattern opacity-50 z-0 pointer-events-none" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-soft-green-surface blur-[120px] opacity-60 z-0 pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-surface-container-high blur-[140px] opacity-40 z-0 pointer-events-none" />
+
+      {/* Login Container */}
+      <div className="relative z-10 w-full max-w-6xl px-8 py-12 flex flex-col lg:flex-row items-center justify-between gap-16">
+        
+        {/* Left Side: Branding & Value Prop */}
+        <div className="hidden lg:flex flex-col flex-1 max-w-xl text-left animate-fade-in">
+          <h1 className="text-primary mb-6 leading-tight text-5xl font-bold font-sans">
+            Smart Clinic <br/>Appointment System
+          </h1>
+          <p className="text-on-surface-variant mb-10 max-w-md text-lg leading-relaxed font-sans">
+            Streamline your clinic operations with an intelligent scheduling platform. Manage appointments, patients, and doctors — all in one place.
+          </p>
+          <div className="flex gap-8">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-secondary text-[18px] font-bold">check_circle</span>
+              <span className="text-sm font-medium text-on-surface-variant font-sans">Real-time scheduling</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 backdrop-blur-sm border border-slate-200/80 shadow-soft">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.5s' }} />
-              <span className="text-sm font-medium text-text-dark">Patient management</span>
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-secondary text-[18px] font-bold">check_circle</span>
+              <span className="text-sm font-medium text-on-surface-variant font-sans">Patient management</span>
             </div>
-          </div>
-          <div className="mt-12 rounded-2xl overflow-hidden shadow-glass border border-white/50 bg-white/40 backdrop-blur-sm p-4">
-            <LoginIllustration className="w-full h-64" />
           </div>
         </div>
-      </div>
 
-      {/* Right: Login form */}
-      <div className="w-full lg:w-1/2 xl:w-2/5 flex items-center justify-center p-6 sm:p-12">
-        <div className="w-full max-w-md animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <div className="card-glass">
-            <div className="text-center mb-8">
-              <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#38BDF8] text-white mb-4 shadow-lg shadow-primary/25">
-                <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2v20M2 12h20M12 6v12M6 12h12" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-text-dark">CareSync</h2>
-              <p className="text-text-muted mt-1.5 text-sm">Sign in to your clinic dashboard</p>
+        {/* Right Side: Login Card */}
+        <div className="w-full max-w-md bg-surface-white rounded-xl border border-border-quiet p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] animate-fade-in-up">
+          {/* Logo Header */}
+          <div className="flex flex-col items-center mb-8">
+            <img src={logo} alt="CareSync Logo" className="h-28 w-auto object-contain mb-2" />
+            <p className="text-xs text-on-surface-variant font-sans">Sign in to your clinic dashboard</p>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            
+            {/* Email Field */}
+            <div>
+              <label className="block text-xs font-semibold text-text-primary mb-2 font-sans" htmlFor="email">
+                Email
+              </label>
+              <input
+                className="w-full h-11 px-4 bg-surface-white border border-border-quiet rounded-lg text-sm text-text-primary placeholder:text-slate-400 focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors font-sans"
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@clinic.com"
+                required
+              />
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-text-dark mb-2">
-                  Email
+            {/* Password Field */}
+            <div>
+              <label className="block text-xs font-semibold text-text-primary mb-2 font-sans" htmlFor="password">
+                Password
+              </label>
+              <input
+                className="w-full h-11 px-4 bg-surface-white border border-border-quiet rounded-lg text-sm text-text-primary placeholder:text-slate-400 focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors font-sans"
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            {/* Role Selection */}
+            <div>
+              <label className="block text-xs font-semibold text-text-primary mb-3 font-sans">
+                Role
+              </label>
+              <div className="flex gap-6">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="receptionist"
+                    checked={role === 'receptionist'}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-4 h-4 text-primary border-slate-300 focus:ring-primary focus:ring-offset-0 bg-surface-white"
+                  />
+                  <span className="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors font-sans">
+                    Receptionist
+                  </span>
                 </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="input-field"
-                  placeholder="you@clinic.com"
-                  autoComplete="email"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-text-dark mb-2">
-                  Password
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="doctor"
+                    checked={role === 'doctor'}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-4 h-4 text-primary border-slate-300 focus:ring-primary focus:ring-offset-0 bg-surface-white"
+                  />
+                  <span className="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors font-sans">
+                    Doctor
+                  </span>
                 </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="input-field"
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                  required
-                />
               </div>
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-text-dark mb-2">
-                  Role
-                </label>
-                <div className="flex gap-6">
-                  <label className="flex items-center gap-2.5 cursor-pointer group">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="receptionist"
-                      checked={role === 'receptionist'}
-                      onChange={(e) => setRole(e.target.value)}
-                      className="w-4 h-4 text-primary focus:ring-primary"
-                    />
-                    <span className="text-sm font-medium group-hover:text-primary transition-colors">Receptionist</span>
-                  </label>
-                  <label className="flex items-center gap-2.5 cursor-pointer group">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="doctor"
-                      checked={role === 'doctor'}
-                      onChange={(e) => setRole(e.target.value)}
-                      className="w-4 h-4 text-primary focus:ring-primary"
-                    />
-                    <span className="text-sm font-medium group-hover:text-primary transition-colors">Doctor</span>
-                  </label>
-                </div>
+            {error && (
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-danger/10 border border-danger/20 text-danger text-xs font-medium animate-scale-in">
+                <span className="material-symbols-outlined text-[16px]">error</span>
+                <span className="font-sans">{error}</span>
               </div>
+            )}
 
-              {error && (
-                <div className="flex items-center gap-2 p-3 rounded-xl bg-danger/10 border border-danger/20 text-danger text-sm font-medium animate-scale-in">
-                  <svg className="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                  {error}
-                </div>
-              )}
-
+            {/* Actions */}
+            <div className="pt-2">
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full py-3 text-base"
+                className="w-full h-11 bg-secondary text-white font-semibold text-sm rounded-lg hover:bg-primary transition-colors focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 flex justify-center items-center font-sans"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -165,16 +165,16 @@ export default function Login() {
                   'Sign in'
                 )}
               </button>
-
-              <a
-                href="#"
-                className="block text-center text-sm text-primary hover:underline font-medium transition-opacity hover:opacity-80"
-              >
-                Forgot password?
-              </a>
-            </form>
-          </div>
+              
+              <div className="mt-6 text-center">
+                <a className="text-xs text-secondary hover:text-primary font-semibold transition-colors font-sans" href="#">
+                  Forgot password?
+                </a>
+              </div>
+            </div>
+          </form>
         </div>
+
       </div>
     </div>
   )

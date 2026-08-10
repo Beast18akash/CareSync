@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import logo from '../assets/logo.png'
 import {
   LayoutDashboard,
   CalendarPlus,
@@ -22,16 +23,6 @@ const menuItems = [
   { path: '/settings', icon: Settings, label: 'Settings' },
 ]
 
-function CareSyncLogo() {
-  return (
-    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#2563EB] to-[#38BDF8] text-white shadow-lg shadow-primary/20">
-      <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2v20M2 12h20" />
-        <path d="M12 6v12M6 12h12" />
-      </svg>
-    </div>
-  )
-}
 
 export default function Sidebar({ isOpen, onClose }) {
   return (
@@ -51,14 +42,8 @@ export default function Sidebar({ isOpen, onClose }) {
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >
-        <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center gap-3">
-            <CareSyncLogo />
-            <div>
-              <h1 className="text-lg font-bold text-text-dark">CareSync</h1>
-              <p className="text-xs text-text-muted">Clinic Dashboard</p>
-            </div>
-          </div>
+        <div className="p-5 border-b border-slate-100 flex items-center justify-center">
+          <img src={logo} alt="CareSync Logo" className="h-14 w-auto object-contain" />
         </div>
         <nav className="flex-1 p-4 space-y-0.5 overflow-y-auto">
           {menuItems.map(({ path, icon: Icon, label }) => (
