@@ -1,8 +1,10 @@
 export default function PageHeader({ title, subtitle, action }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 animate-fade-in-up">
       <div>
-        <h1 className="text-2xl font-bold text-text-dark tracking-tight">{title}</h1>
+        <h1 className="text-2xl font-bold text-text-dark tracking-tight">
+          {title}
+        </h1>
         {subtitle && (
           <p className="text-text-muted mt-1.5 text-sm">{subtitle}</p>
         )}

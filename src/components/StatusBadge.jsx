@@ -31,7 +31,7 @@ export default function StatusBadge({ status }) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold ${config.bg} ${config.text}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors duration-200 ${config.bg} ${config.text}`}
     >
       {config.label}
     </span>

@@ -9,9 +9,27 @@ function Avatar({ name, className = 'h-9 w-9' }) {
     .join('')
     .slice(0, 2)
     .toUpperCase() || '?'
+  const avatarUrl = name ? `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2563EB&color=fff&size=96` : null
+
   return (
-    <div className={`${className} shrink-0 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-sm`}>
-      {initials}
+    <div className={`${className} shrink-0 rounded-full bg-gradient-to-br from-[#2563EB]/20 to-[#38BDF8]/20 overflow-hidden flex items-center justify-center font-semibold text-sm text-primary border-2 border-primary/20 relative`}>
+      {avatarUrl ? (
+        <>
+          <img
+            src={avatarUrl}
+            alt={name}
+            className="absolute inset-0 h-full w-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none'
+              const fb = e.target.nextElementSibling
+              if (fb) fb.classList.remove('hidden')
+            }}
+          />
+          <span className="absolute inset-0 hidden flex items-center justify-center bg-gradient-to-br from-[#2563EB]/20 to-[#38BDF8]/20">{initials}</span>
+        </>
+      ) : (
+        initials
+      )}
     </div>
   )
 }
@@ -62,7 +80,7 @@ export default function AppointmentTable({
     return (
       <button
         onClick={onClick}
-        className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-colors ${variants[variant] || variants.primary}`}
+        className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 ${variants[variant] || variants.primary}`}
       >
         {Icon && <Icon className="h-4 w-4" strokeWidth={2} />}
         {children}
@@ -111,7 +129,7 @@ export default function AppointmentTable({
           {appointments.map((apt) => (
             <tr
               key={apt.id}
-              className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors"
+              className="border-b border-slate-100 last:border-0 hover:bg-slate-50/80 transition-colors duration-200"
             >
               {columns.includes('patient') && (
                 <td className="py-4 px-4">

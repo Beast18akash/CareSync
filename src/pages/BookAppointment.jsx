@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import Modal from '../components/Modal'
 import { PageHeader } from '../components/ui'
 import { useAppointments } from '../context/AppointmentsContext'
+import { BookingIllustration } from '../components/illustrations'
 import { CheckCircle, Stethoscope } from 'lucide-react'
 
 const today = new Date().toISOString().split('T')[0]
@@ -126,6 +127,17 @@ export default function BookAppointment() {
 
   return (
     <div className="space-y-8 max-w-3xl">
+      <div className="rounded-2xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-slate-200/60 p-6 mb-8 overflow-hidden">
+        <div className="flex flex-col sm:flex-row items-center gap-6">
+          <div className="flex-1">
+            <h2 className="text-xl font-bold text-text-dark">Book a New Appointment</h2>
+            <p className="text-text-muted mt-1 text-sm">Select a doctor, choose your preferred date and time, and we&apos;ll take care of the rest.</p>
+          </div>
+          <div className="shrink-0 w-48">
+            <BookingIllustration />
+          </div>
+        </div>
+      </div>
       <PageHeader
         title="Book Appointment"
         subtitle="Schedule a new patient appointment with a doctor"

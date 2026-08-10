@@ -24,7 +24,7 @@ const menuItems = [
 
 function CareSyncLogo() {
   return (
-    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white">
+    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#2563EB] to-[#38BDF8] text-white shadow-lg shadow-primary/20">
       <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2v20M2 12h20" />
         <path d="M12 6v12M6 12h12" />
@@ -38,15 +38,16 @@ export default function Sidebar({ isOpen, onClose }) {
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-20 lg:hidden"
+          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-20 lg:hidden animate-fade-in"
           onClick={onClose}
           aria-hidden="true"
         />
       )}
       <aside
         className={`
-          w-64 min-h-screen bg-white border-r border-slate-200/80 flex flex-col fixed left-0 top-0 z-30
+          w-64 min-h-screen bg-white/90 backdrop-blur-xl border-r border-slate-200/80 flex flex-col fixed left-0 top-0 z-30
           transform transition-transform duration-300 ease-in-out lg:translate-x-0
+          shadow-glass
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >
@@ -66,14 +67,15 @@ export default function Sidebar({ isOpen, onClose }) {
               to={path}
               onClick={() => onClose?.()}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium group ${
-                  isActive
-                    ? 'bg-primary/10 text-primary shadow-sm'
-                    : 'text-text-muted hover:bg-slate-50 hover:text-text-dark'
-                }`
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium group relative overflow-hidden
+                ${isActive
+                  ? 'bg-gradient-to-r from-primary/15 to-primary/5 text-primary shadow-sm border-l-4 border-l-primary'
+                  : 'text-text-muted hover:bg-slate-50 hover:text-text-dark border-l-4 border-l-transparent'
+                }
+                `
               }
             >
-              <Icon className="h-5 w-5 shrink-0 transition-transform group-hover:scale-105" strokeWidth={1.75} />
+              <Icon className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-110" strokeWidth={1.75} />
               <span>{label}</span>
             </NavLink>
           ))}

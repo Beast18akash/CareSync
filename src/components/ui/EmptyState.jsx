@@ -1,9 +1,9 @@
 export default function EmptyState({ icon: Icon, title, description, action }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+    <div className="flex flex-col items-center justify-center py-16 px-6 text-center animate-fade-in-up">
       {Icon && (
-        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
-          <Icon className="h-8 w-8" strokeWidth={1.5} />
+        <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary">
+          <Icon className="h-10 w-10" strokeWidth={1.5} />
         </div>
       )}
       <p className="font-semibold text-text-dark text-lg">{title}</p>

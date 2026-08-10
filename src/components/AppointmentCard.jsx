@@ -12,7 +12,7 @@ export default function AppointmentCard({
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
-      className={`rounded-xl border border-slate-200/80 bg-white p-4 cursor-pointer hover:shadow-md hover:border-primary/30 transition-all duration-200 ${onClick ? '' : 'cursor-default'}`}
+      className={`rounded-xl border border-slate-200/80 bg-white/90 p-4 cursor-pointer hover:shadow-md hover:border-primary/30 hover:-translate-y-0.5 transition-all duration-200 ${onClick ? '' : 'cursor-default'}`}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
